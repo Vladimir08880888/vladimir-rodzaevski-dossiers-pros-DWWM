@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Crew — Résumé du projet</title>
+<style>
+  @page { margin: 2cm 2.2cm; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    color: #1c1c1c;
+    font-size: 10.6pt;
+    line-height: 1.48;
+  }
+
+  header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1.4pt solid #1c1c1c;
+    padding-bottom: 8px; margin-bottom: 4px;
+  }
+  h1 { font-size: 19pt; font-weight: 700; margin: 0; letter-spacing: 0.2px; }
+  .tagline { font-family: -apple-system, Helvetica, Arial, sans-serif; font-size: 9pt; color: #55524c; margin: 2px 0 0; }
+  .meta {
+    text-align: right; font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 8.4pt; color: #3a3833; line-height: 1.55;
+  }
+  .meta strong { color: #1c1c1c; }
+  .meta a { color: #1c1c1c; }
+
+  .subheader {
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 8.6pt; color: #55524c;
+    margin: 0 0 14px; padding-bottom: 8px; border-bottom: 0.6pt solid #cfccc3;
+  }
+
+  h2 {
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 9.6pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    color: #1c1c1c;
+    margin: 15px 0 5px;
+  }
+  p { margin: 0 0 6px; text-align: justify; }
+  ul { margin: 4px 0 6px; padding-left: 15px; }
+  li { margin: 2px 0; text-align: justify; }
+  strong { color: #1c1c1c; }
+
+  .cols { display: flex; gap: 26px; }
+  .cols > div { flex: 1; }
+
+  table.facts { width: 100%; border-collapse: collapse; margin: 4px 0 8px; font-size: 9.6pt; }
+  table.facts td { padding: 2.5px 0; border-bottom: 0.5pt solid #e2dfd6; vertical-align: top; }
+  table.facts td:first-child { width: 34%; color: #55524c; font-family: -apple-system, Helvetica, Arial, sans-serif; font-size: 8.4pt; }
+
+  .stack {
+    font-family: -apple-system, Helvetica, Arial, sans-serif; font-size: 8.6pt;
+    color: #3a3833; margin: 2px 0 8px;
+  }
+
+  blockquote {
+    margin: 6px 0; padding: 6px 10px; border-left: 2.4pt solid #1c1c1c;
+    font-style: italic; color: #3a3833; font-size: 9.8pt;
+  }
+
+  .pagebreak { page-break-before: always; }
+
+  footer {
+    margin-top: 16px; padding-top: 7px; border-top: 0.6pt solid #cfccc3;
+    font-family: -apple-system, Helvetica, Arial, sans-serif;
+    font-size: 8.2pt; color: #55524c; text-align: center;
+  }
+  footer a { color: #1c1c1c; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Crew</h1>
+    <p class="tagline">Application web de planification d'équipe — auto-planning sous contraintes légales</p>
+  </div>
+  <div class="meta">
+    <strong>Vladimir Rodzaevskiy</strong><br>
+    Titre professionnel Développeur Web et Web Mobile — RNCP 37674<br>
+    La Plateforme Formation, Marseille — 2026
+  </div>
+</header>
+<p class="subheader">
+  Démo : crew-planner-hazel.vercel.app &nbsp;·&nbsp; Code source : github.com/Vladimir08880888/crew &nbsp;·&nbsp;
+  Projet individuel, du cadrage au déploiement en production &nbsp;·&nbsp; Dossier de projet complet : 36 pages
+</p>
+
+<h2>Contexte et objectifs</h2>
+<p>
+Dans les secteurs à rotation de shifts (restauration, hôtellerie, retail), le planning d'équipe se construit
+encore très souvent à la main — tableur reconstruit chaque semaine, messages informels — sans garde-fou sur
+la couverture de service ni sur le droit du travail. Crew répond à ce besoin en donnant au manager un outil
+qui génère un planning hebdomadaire complet en quelques secondes, tout en garantissant par construction le
+respect de la Convention collective HCR (plafonds horaires, repos obligatoires). L'objectif n'était pas
+seulement de coder une fonctionnalité isolée mais de livrer une application utilisable de bout en bout :
+authentification, gestion d'équipe, planning éditable, génération automatique, statistiques, synchronisation
+calendrier — déployée et accessible en ligne.
+</p>
+
+<h2>Fonctionnalités principales</h2>
+<ul>
+  <li><strong>Gestion d'équipe</strong> — création, code d'invitation, approbation des membres, configuration
+  par équipier (poste, niveau, polyvalence, heures cibles).</li>
+  <li><strong>Planning hebdomadaire éditable</strong> — grille interactive, ajout/déplacement manuel,
+  clonage ou vidage d'une semaine.</li>
+  <li><strong>Smart Planner</strong> — génération automatique d'un planning complet avec aperçu avant
+  validation et signalement des créneaux non couverts.</li>
+  <li><strong>Statistiques</strong> — répartition des shifts par poste et par équipier, réservées aux
+  managers.</li>
+  <li><strong>Synchronisation calendrier</strong> — flux iCal natif (iPhone/Android), sans application
+  supplémentaire à installer.</li>
+</ul>
+
+<div class="cols">
+  <div>
+    <h2>Architecture et déploiement</h2>
+    <table class="facts">
+      <tr><td>Front-end</td><td>React 18, React Router 6, Vite, i18next (FR/EN)</td></tr>
+      <tr><td>Back-end</td><td>Node.js 22, Express 4, requêtes SQL préparées (mysql2, sans ORM)</td></tr>
+      <tr><td>Base de données</td><td>MariaDB 10.11 — 4 tables, 12 migrations</td></tr>
+      <tr><td>Authentification</td><td>JWT (HS256), mots de passe hachés bcrypt</td></tr>
+      <tr><td>Déploiement</td><td>Vercel (front) et Fly.io (back + base de données)</td></tr>
+    </table>
+  </div>
+  <div>
+    <h2>Sécurité</h2>
+    <ul>
+      <li>Requêtes SQL exclusivement préparées — protection contre l'injection SQL.</li>
+      <li>Mots de passe hachés (bcrypt), jamais stockés en clair.</li>
+      <li>Contrôle des rôles vérifié côté serveur sur chaque route sensible.</li>
+      <li>Rate limiting sur les routes d'authentification.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Le point technique central : le solver d'auto-planning</h2>
+<p>
+La difficulté du projet n'est pas l'affichage d'un planning mais sa <strong>construction automatique</strong>
+sous contraintes concurrentes : couvrir chaque créneau, respecter les heures cibles de chaque équipier,
+ne jamais violer le droit du travail. Plutôt qu'un solveur exact (programmation linéaire, type MIP), j'ai
+choisi une <strong>heuristique multi-passes</strong>, structurée en quatre étapes issues de domaines connus
+de l'informatique :
+</p>
+<ul>
+  <li><strong>Score multicritère</strong> — chaque candidat à un créneau est noté par une somme pondérée
+  (déficit d'heures × 10, service habituel × 5, poste habituel × 3, coût horaire en pénalité), qui encode
+  une hiérarchie de priorités plutôt que des poids arbitraires.</li>
+  <li><strong>Affectation gloutonne en round-robin</strong> — chaque créneau reçoit un premier équipier
+  avant qu'aucun n'en reçoive un second, pour garantir l'équité entre les jours.</li>
+  <li><strong>Contraintes dures (CSP)</strong> — les règles de la Convention HCR (48 h max, 2 jours de
+  repos, 6 jours consécutifs maximum, débutant jamais seul) filtrent les candidats en amont : un planning
+  illégal est impossible par construction.</li>
+  <li><strong>Recherche locale</strong> — un rééquilibrage final améliore la solution par échanges successifs
+  entre créneaux, tant que l'écart global à la couverture cible diminue.</li>
+</ul>
+<blockquote>
+Ce choix privilégie l'exécution instantanée et un comportement explicable — essentiel pour un usage
+interactif où le manager régénère et ajuste le planning plusieurs fois — plutôt que la garantie d'un
+optimum mathématique, coûteuse à calculer et peu utile en pratique à cette échelle.
+</blockquote>
+
+<h2>Démarche et méthode</h2>
+<p>
+Projet mené seul, du cadrage (besoins, user stories, arborescence, MVP) à la mise en production, sur environ
+deux mois. Le développement a suivi un cycle itératif : un MVP fonctionnel a d'abord couvert le parcours
+minimal (authentification, équipe, planning manuel), suivi de deux évolutions notables — le Smart Planner
+et la synchronisation iCal — chacune validée par un jeu de scénarios manuels avant intégration. Le schéma de
+base de données et les choix d'architecture sont documentés dans le dossier de projet complet (diagrammes
+MCD/MLD, dictionnaire des données, spécification des 30 routes back-end et 13 routes front-end).
+</p>
+
+<h2>Limites actuelles et suites prévues</h2>
+<p>
+Crew reste volontairement centré sur le planning : il ne gère ni facturation ni paie, ce qui est hors
+périmètre assumé. Les outils manager pourraient être enrichis d'un suivi du coût réalisé face au prévisionnel
+et d'un export PDF du planning. Pour un usage multi-établissements, une authentification renforcée
+(2FA, SSO) serait également à prévoir avant une mise en production à plus grande échelle.
+</p>
+
+<footer>
+  Dossier de projet complet (36 pages) et code source disponibles sur demande ou via les liens ci-dessus.
+</footer>
+
+</body>
+</html>
