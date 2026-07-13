@@ -1,0 +1,48 @@
+%% Diagramme de Séquence — Génération de planning (Smart Planner)
+%% Crew
+%%
+%% Le cœur technique du projet : le solver d'auto-planning propose un
+%% planning complet en respectant couverture, coût, droit du travail (HCR)
+%% et préférences des équipiers — sans jamais créer les shifts directement
+%% (aperçu avant validation manager).
+
+sequenceDiagram
+    autonumber
+    actor M as Manager
+    participant F as Front React<br/>(Planning.jsx)
+    participant B as Back Express
+    participant CTRL as shifts.controller
+    participant SOLV as plannerSolver.js
+    participant DB as MariaDB
+
+    Note over M,F: 1. Lancement de l'aperçu
+    M->>F: Ouvre Smart Planner<br/>choisit période + capacités
+    F->>B: POST /api/shifts/generate-plan<br/>{ team_id, from, to, capacityByDate… }
+    B->>CTRL: generatePlan(req)
+    CTRL->>DB: SELECT team_members actifs<br/>+ shifts existants + settings équipe
+    DB-->>CTRL: membres, shifts, coefficients, jours fermés
+
+    Note over CTRL,SOLV: 2. Résolution multi-pass
+    CTRL->>SOLV: generatePlan({ members, weekDates,<br/>existingShifts, settings, closedDays })
+    SOLV->>SOLV: Passe 1 — couverture idéale<br/>(round-robin, poste primaire, cap HCR/jour)
+    SOLV->>SOLV: Passe 2 — tolérance horaire +5h<br/>anti-overshoot 130 %
+    SOLV->>SOLV: Passe 3 — polyvalence (skills_mask)<br/>si aucun profil primaire éligible
+    SOLV->>SOLV: Passe 4 — cost-aware<br/>pénalité masse salariale (taux/niveau)
+    SOLV->>SOLV: Passe finale — équilibrage<br/>transfert sur-couvert → sous-couvert
+    SOLV-->>CTRL: { suggested[], uncovered[], hours{} }
+    CTRL-->>F: 200 OK — aperçu du planning
+
+    Note over M,F: 3. Revue manager
+    F-->>M: Affiche grille planning proposée<br/>+ créneaux non couverts en alerte
+    M->>F: Ajuste manuellement si besoin<br/>(drag & drop, suppression ligne)
+
+    Note over M,F: 4. Application définitive
+    M->>F: Clique 'Valider le planning'
+    F->>B: POST /api/shifts/apply-plan<br/>{ team_id, shifts: [...] }
+    B->>CTRL: applyPlan(req)
+    loop pour chaque shift proposé
+        CTRL->>DB: INSERT INTO shifts<br/>(ignore si doublon user+date+type)
+    end
+    DB-->>CTRL: created, skipped
+    CTRL-->>F: 200 OK { created, skipped }
+    F-->>M: Planning appliqué ✅<br/>visible immédiatement par les équipiers (+ iCal)

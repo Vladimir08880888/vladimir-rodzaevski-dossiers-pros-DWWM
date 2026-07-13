@@ -9,9 +9,18 @@ Google Calendar (Android) avec notifications natives 2h avant chaque shift.
 
 **Durée** : 2 mois — **Projet individuel** — Titre Professionnel DWWM
 
+**Documents complémentaires** :
+[`user-stories.md`](./user-stories.md) ·
+[`diagrammes/`](./diagrammes/) (packages, cas d'utilisation, MCD, MLD,
+séquences, activités) ·
+[`maquettes/wireframes.md`](./maquettes/wireframes.md) ·
+[`maquettes/charte-graphique.md`](./maquettes/charte-graphique.md)
+
 ---
 
 ## 1. Stack technique
+
+Architecture en couches détaillée : [`diagrammes/packages.mmd`](./diagrammes/packages.mmd).
 
 | Couche               | Technologie                          |
 | -------------------- | ------------------------------------ |
@@ -81,6 +90,12 @@ semaine en cours (`clear-week`).
 
 ## 3. Rôles et permissions
 
+Voir [`diagrammes/use-cases.mmd`](./diagrammes/use-cases.mmd) pour la vue
+d'ensemble des cas d'utilisation par acteur (Visiteur, Équipier, Manager,
+Admin, Calendrier externe), et
+[`diagrammes/activite-approbation-membre.mmd`](./diagrammes/activite-approbation-membre.mmd)
+pour le flux détaillé de rattachement à une équipe.
+
 | Action                                | Manager admin | Manager | Équipier |
 | ------------------------------------- | :-----------: | :-----: | :------: |
 | Inviter / approuver un membre         |      ✓        |    ✗    |    ✗     |
@@ -98,6 +113,11 @@ semaine en cours (`clear-week`).
 ---
 
 ## 4. Modèle de données
+
+Voir [`diagrammes/mcd.mmd`](./diagrammes/mcd.mmd) (Modèle Conceptuel) et
+[`diagrammes/mld.mmd`](./diagrammes/mld.mmd) (Modèle Logique, avec index et
+contraintes). Version condensée avec description textuelle des règles
+d'intégrité : [`annexes/SCHEMA_BDD.md`](./annexes/SCHEMA_BDD.md).
 
 ### Table `users`
 ```sql
@@ -198,6 +218,13 @@ toutes exigent un header `Authorization: Bearer <jwt>`.
 ---
 
 ## 6. Fonctionnalités fonctionnelles
+
+Flux détaillés : [`diagrammes/activite-auth.mmd`](./diagrammes/activite-auth.mmd)
+(inscription/connexion),
+[`diagrammes/sequence-generate-plan.mmd`](./diagrammes/sequence-generate-plan.mmd)
+(Smart Planner) et
+[`diagrammes/sequence-ical.mmd`](./diagrammes/sequence-ical.mmd)
+(synchronisation calendrier). Wireframes des écrans : [`maquettes/wireframes.md`](./maquettes/wireframes.md).
 
 ### Compte
 - Inscription, connexion, déconnexion, JWT 7 jours

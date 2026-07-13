@@ -14,10 +14,14 @@
 | ---------------------------------- | -------------------------------------------------- |
 | `cahier-des-charges.md`            | Cahier des charges (stack, métier, schéma, API, sécurité, déploiement, évolutions v2). |
 | `README-projet.md`                 | README du dépôt code (lien rapide).                |
+| `user-stories.md`                  | 18 user stories au format Connextra (auth, équipes, planning, iCal, stats, profil, i18n). |
+| `diagrammes/`                      | 8 diagrammes UML/Merise (Mermaid) : packages, cas d'utilisation, MCD, MLD, 2 séquences (Smart Planner, iCal), 2 activités (auth, approbation membre). |
+| `maquettes/wireframes.md`          | Wireframes ASCII des 11 écrans clés, basés sur les textes d'interface réels (`fr.json`). |
+| `maquettes/charte-graphique.md`    | Charte graphique « Bistro/Éditorial » — palette, typographie, ombres, animations (source : `variables.css`). |
 | `annexes/JUSTIFICATION_SCIENTIFIQUE.md` | Synthèse des références peer-reviewed qui sous-tendent le solver (12 sources, INRS, NIOSH, Convention HCR, OR economics). |
 | `annexes/MANUEL_UTILISATEUR.md`    | Guide manager + équipier (synchronisation iCal, FAQ). |
 | `annexes/PLAN_DE_TESTS.md`         | Plan de tests détaillé — 9 blocs initiaux + 7 blocs v2 (solver enrichi). Bilan d'exécution Playwright. |
-| `annexes/SCHEMA_BDD.md`            | MCD / MLD au format Mermaid + règles d'intégrité. |
+| `annexes/SCHEMA_BDD.md`            | MCD / MLD au format Mermaid (version condensée) + règles d'intégrité. |
 | `annexes/screenshots/`             | 17 captures d'écran (web + mobile, FR + EN, démo + édition). |
 
 ## Stack technique

@@ -1,0 +1,39 @@
+%% Diagramme d'Activité — Approbation d'un nouveau membre
+%% Crew
+%%
+%% Flux : équipier rejoint via code d'invitation → manager approuve ou non.
+%% Aucun membre n'accède au planning tant que son statut reste 'pending'.
+
+flowchart TD
+    START([Équipier ouvre TeamJoin]) --> INPUT[Saisit le code d'invitation<br/>communiqué par le manager]
+    INPUT --> POST[POST /api/teams/join<br/>{ invite_code }]
+    POST --> CTRL[teamsController.join]
+    CTRL --> FIND_TEAM{Code valide ?}
+    FIND_TEAM -- Non 404 --> END_ERR1([Erreur : code invalide])
+    FIND_TEAM -- Oui --> CHECK_EXIST{Déjà membre<br/>ou demande en cours ?}
+    CHECK_EXIST -- Oui 409 --> END_ERR2([Erreur : déjà en attente])
+    CHECK_EXIST -- Non --> INSERT[INSERT team_members<br/>role=equipier, status=pending]
+    INSERT --> NOTIF1[Front : 'Demande envoyée,<br/>en attente de validation']
+    NOTIF1 --> MANAGER_WAIT([Manager voit le membre<br/>en attente sur TeamDetail])
+
+    MANAGER_WAIT --> MANAGER_DECIDE{Manager décide}
+    MANAGER_DECIDE -- Refuse --> REMOVE[DELETE team_members<br/>retire la demande]
+    REMOVE --> END_REFUSED([Demande refusée])
+
+    MANAGER_DECIDE -- Approuve --> CHOOSE_ROLE[Choisit le rôle final<br/>manager ou equipier]
+    CHOOSE_ROLE --> POST_APPROVE[POST /api/teams/:teamId/approve/:userId<br/>{ role }]
+    POST_APPROVE --> CTRL2[teamsController.approve]
+    CTRL2 --> CHECK_MEMBER{Membre trouvé ?}
+    CHECK_MEMBER -- Non 404 --> END_ERR3([Erreur])
+    CHECK_MEMBER -- Oui --> UPDATE[UPDATE team_members<br/>SET status='active', role=?]
+    UPDATE --> CONFIGURE[Manager configure ensuite<br/>poste, niveau, heures cibles]
+    CONFIGURE --> ACTIVE([Membre actif :<br/>visible dans le Smart Planner<br/>et sur le planning d'équipe])
+
+    classDef start fill:#10b981,color:#fff
+    classDef decision fill:#f59e0b,color:#000
+    classDef error fill:#ef4444,color:#fff
+    classDef ok fill:#6366f1,color:#fff
+    class START,ACTIVE start
+    class FIND_TEAM,CHECK_EXIST,MANAGER_DECIDE,CHECK_MEMBER decision
+    class END_ERR1,END_ERR2,END_ERR3,END_REFUSED error
+    class INSERT,UPDATE,CHOOSE_ROLE,CONFIGURE ok

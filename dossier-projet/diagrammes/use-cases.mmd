@@ -1,0 +1,60 @@
+%% Diagramme de Cas d'Utilisation — UML
+%% Crew
+%%
+%% Acteurs :
+%%   - Visiteur   : utilisateur non authentifié
+%%   - Équipier   : membre authentifié d'une équipe (role=equipier)
+%%   - Manager    : membre authentifié avec role=manager
+%%   - Admin      : manager + is_admin=true (créateur de l'équipe, ou promu)
+%%   - Calendrier : système externe (iPhone Cal / Google Cal) consommateur d'iCal
+%%
+%% Mermaid ne supporte pas la notation officielle UML use-case (ellipses) ;
+%% on utilise un flowchart pour rester compatible GitHub.
+
+flowchart LR
+    V((👤 Visiteur))
+    E((👤 Équipier))
+    M((👨‍🍳 Manager))
+    A((⭐ Admin))
+    C((📱 Calendrier<br/>externe))
+
+    %% Cas d'utilisation Visiteur
+    V --> UC1["S'inscrire"]
+    V --> UC2["Se connecter"]
+
+    %% Cas Équipier (commun à tous les membres)
+    E --> UC3["Voir son dashboard"]
+    E --> UC4["Modifier son profil"]
+    E --> UC5["Changer mot de passe"]
+    E --> UC6["Quitter une équipe"]
+    E --> UC7["Rejoindre une équipe<br/>via code d'invitation"]
+    E --> UC8["Consulter son planning"]
+    E --> UC9["Obtenir son URL iCal<br/>personnelle"]
+
+    %% Cas Manager
+    M --> UC10["Créer une équipe<br/>(devient Admin)"]
+    M --> UC11["Approuver un membre<br/>en attente"]
+    M --> UC12["Configurer un membre<br/>(poste, niveau, skills,<br/>heures cibles, coef)"]
+    M --> UC13["Configurer l'équipe<br/>(coefficients, couverts,<br/>jours d'ouverture, taux horaires)"]
+    M --> UC14["Générer un planning<br/>(Smart Planner)"]
+    M --> UC15["Modifier un shift<br/>manuellement"]
+    M --> UC16["Cloner une semaine"]
+    M --> UC17["Vider une semaine"]
+    M --> UC18["Consulter les statistiques<br/>d'équipe"]
+    M --> UC19["Réinitialiser le mot de passe<br/>d'un équipier"]
+    M --> UC20["Exporter le planning<br/>d'équipe en iCal"]
+
+    %% Cas Admin (sur-ensemble de Manager)
+    A --> UC21["Régénérer le code<br/>d'invitation"]
+    A --> UC22["Retirer un membre<br/>de l'équipe"]
+    A --> UC23["Renommer / supprimer<br/>l'équipe"]
+
+    %% Cas système externe
+    C --> UC9
+    C --> UC20
+
+    classDef acteur fill:#fef3c7,stroke:#d97706,color:#1a1612
+    classDef equipier fill:#e0e7ff,stroke:#6366f1,color:#1e1b3a
+    classDef manager fill:#fce7f3,stroke:#ec4899,color:#1e1b3a
+    classDef admin fill:#fee2e2,stroke:#dc2626,color:#1e1b3a
+    class V,E,M,A,C acteur

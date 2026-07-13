@@ -1,0 +1,80 @@
+%% MLD — Modèle Logique de Données
+%% Crew
+%%
+%% Représente les tables physiques avec clés primaires, étrangères, index.
+%% Les énumérations sont matérialisées par des types ENUM MySQL/MariaDB.
+%% État : cumul des migrations 001 à 012 (schéma final)
+
+erDiagram
+    users {
+        INT id PK "AUTO_INCREMENT"
+        VARCHAR_255 email UK
+        VARCHAR_255 password_hash
+        VARCHAR_100 first_name
+        VARCHAR_100 last_name
+        VARCHAR_64 calendar_token UK
+        DATETIME created_at "DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    teams {
+        INT id PK "AUTO_INCREMENT"
+        VARCHAR_100 name
+        VARCHAR_32 invite_code UK
+        INT created_by FK "→ users.id ON DELETE RESTRICT"
+        DATETIME created_at "DEFAULT CURRENT_TIMESTAMP"
+        INT junior_coef "DEFAULT 15 (migration 009)"
+        INT confirme_coef "DEFAULT 40"
+        INT chef_coef "DEFAULT 60"
+        INT max_couverts "DEFAULT 100"
+        INT midi_cuisine_ideal
+        INT midi_salle_ideal
+        INT soir_cuisine_ideal
+        INT soir_salle_ideal
+        INT closed_days_mask "DEFAULT 2 (bit lundi)"
+        INT junior_rate "DEFAULT 1200 (centimes/h)"
+        INT confirme_rate "DEFAULT 1400"
+        INT chef_rate "DEFAULT 1900"
+    }
+
+    team_members {
+        INT team_id PK_FK "→ teams.id ON DELETE CASCADE"
+        INT user_id PK_FK "→ users.id ON DELETE CASCADE"
+        ENUM role "(manager,equipier) DEFAULT equipier"
+        BOOLEAN is_admin "DEFAULT FALSE"
+        ENUM status "(active,pending) DEFAULT pending"
+        DATETIME joined_at "DEFAULT CURRENT_TIMESTAMP"
+        ENUM poste "cuisine,salle,bar,plonge,administration — NULL ok"
+        ENUM shift_default "matin,midi,coupure,soir,nuit — NULL ok"
+        ENUM level "(junior,confirme,chef) DEFAULT confirme"
+        INT weekly_hours_target "NULL = exclu du solver"
+        INT coef_override "NULL = hérite du niveau"
+        INT skills_mask "bitmask 5 bits, NULL ok"
+        INDEX idx_team_members_user "(user_id)"
+        INDEX idx_team_members_status "(status)"
+        INDEX idx_team_members_poste "(team_id, poste)"
+    }
+
+    shifts {
+        INT id PK "AUTO_INCREMENT"
+        INT team_id FK "→ teams.id ON DELETE CASCADE"
+        INT user_id FK "→ users.id ON DELETE CASCADE"
+        DATE date
+        ENUM shift_type "matin,midi,coupure,soir,nuit"
+        TIME start_time "NULL ok"
+        TIME end_time "NULL ok"
+        ENUM poste "cuisine,salle,bar,plonge,administration"
+        TEXT note "NULL ok"
+        INT created_by FK_nullable "→ users.id ON DELETE SET NULL"
+        DATETIME created_at "DEFAULT CURRENT_TIMESTAMP"
+        DATETIME updated_at "ON UPDATE CURRENT_TIMESTAMP"
+        INDEX idx_shifts_user_date "(user_id, date)"
+        INDEX idx_shifts_team_date "(team_id, date)"
+        UNIQUE ux_shift_user_day_type "(user_id, date, shift_type)"
+    }
+
+    users ||--o{ teams        : "created_by"
+    users ||--o{ team_members : "user_id"
+    teams ||--o{ team_members : "team_id"
+    users ||--o{ shifts       : "user_id"
+    teams ||--o{ shifts       : "team_id"
+    users ||--o{ shifts       : "created_by"

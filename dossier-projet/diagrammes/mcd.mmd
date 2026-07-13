@@ -1,0 +1,70 @@
+%% MCD — Modèle Conceptuel de Données (Merise)
+%% Crew
+%%
+%% Notation : entité [propriétés] — relation [cardinalités min,max]
+%% Rendu Mermaid : entity-relationship diagram (proche du MCD)
+%% État : cumul des migrations 001 à 012 (schéma final)
+
+erDiagram
+    USER {
+        int id PK
+        string email UK
+        string password_hash
+        string first_name
+        string last_name
+        string calendar_token UK
+        datetime created_at
+    }
+
+    TEAM {
+        int id PK
+        string name
+        string invite_code UK
+        int created_by FK
+        datetime created_at
+        int junior_coef "poids couverture (0-100)"
+        int confirme_coef
+        int chef_coef
+        int junior_rate "taux horaire, centimes"
+        int confirme_rate
+        int chef_rate
+        int max_couverts
+        int closed_days_mask "bitmask jours fermés"
+    }
+
+    TEAM_MEMBER {
+        int team_id PK_FK
+        int user_id PK_FK
+        enum role "manager | equipier"
+        boolean is_admin
+        enum status "active | pending"
+        datetime joined_at
+        enum poste "cuisine | salle | bar | plonge | administration"
+        enum shift_default "matin | midi | coupure | soir | nuit"
+        enum level "junior | confirme | chef"
+        int weekly_hours_target
+        int coef_override "surcharge coef du niveau"
+        int skills_mask "bitmask polyvalence postes"
+    }
+
+    SHIFT {
+        int id PK
+        int team_id FK
+        int user_id FK
+        date date
+        enum shift_type "matin | midi | coupure | soir | nuit"
+        time start_time
+        time end_time
+        enum poste
+        text note
+        int created_by FK_nullable
+        datetime created_at
+        datetime updated_at
+    }
+
+    USER ||--o{ TEAM               : "crée (created_by)"
+    USER ||--o{ TEAM_MEMBER        : "appartient à"
+    TEAM ||--o{ TEAM_MEMBER        : "regroupe"
+    USER ||--o{ SHIFT              : "travaille (user_id)"
+    TEAM ||--o{ SHIFT              : "planifie"
+    USER ||--o{ SHIFT              : "crée (created_by, optionnel)"

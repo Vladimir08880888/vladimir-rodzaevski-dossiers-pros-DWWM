@@ -1,0 +1,51 @@
+%% Diagramme de Packages — UML
+%% Crew — architecture en couches
+%%
+%% Front et back sont deux applications autonomes communiquant via HTTP/JSON.
+%% Chaque couche n'appelle que la couche directement inférieure (Inversion contrôlée).
+
+flowchart TB
+    subgraph FRONT["💻 crew/front (React 18 + Vite)"]
+        F_PAGES["📄 pages/<br/>Login, Register, Dashboard,<br/>ManagerDashboard, EquipierDashboard,<br/>Teams, TeamCreate, TeamJoin, TeamDetail,<br/>TeamSettings, Planning, Stats, Profile,<br/>ManagerHelp"]
+        F_COMPONENTS["🧩 components/<br/>layout, dashboard,<br/>planning, teams, ui"]
+        F_CONTEXT["🌐 context/<br/>Auth, Theme, Toast"]
+        F_API["📡 api/<br/>auth, teams, shifts,<br/>users, calendar, stats"]
+        F_HOOKS["🪝 hooks/<br/>useAuth, useTeam…"]
+        F_UTILS["🛠️ utils/<br/>dates, enums, fetch client"]
+
+        F_PAGES --> F_COMPONENTS
+        F_PAGES --> F_CONTEXT
+        F_PAGES --> F_API
+        F_PAGES --> F_HOOKS
+        F_API --> F_UTILS
+        F_COMPONENTS --> F_CONTEXT
+    end
+
+    subgraph BACK["⚙️ crew/back (Node.js + Express)"]
+        B_ROUTES["🚦 routes/<br/>auth, teams, shifts,<br/>users, calendar, stats"]
+        B_MIDDLEWARE["🛡️ middleware/<br/>auth JWT, teamAccess<br/>(managerRequired, adminRequired),<br/>rateLimit, errorHandler"]
+        B_CONTROLLERS["🎯 controllers/<br/>1 fichier par domaine —<br/>logique métier"]
+        B_VALIDATORS["✅ validators/<br/>auth, team, shift —<br/>HttpError 400"]
+        B_MODELS["📦 models/<br/>user, team, teamMember,<br/>shift — SQL préparé"]
+        B_SERVICES["🔧 services/<br/>password (bcrypt),<br/>jwt, plannerSolver, ical"]
+        B_DB["💾 db/<br/>pool, migrate, seed"]
+
+        B_ROUTES --> B_MIDDLEWARE
+        B_ROUTES --> B_CONTROLLERS
+        B_CONTROLLERS --> B_VALIDATORS
+        B_CONTROLLERS --> B_MODELS
+        B_CONTROLLERS --> B_SERVICES
+        B_MODELS --> B_DB
+    end
+
+    DB[(🗄️ MariaDB<br/>4 tables, 12 migrations)]
+    B_DB --> DB
+
+    F_API -.->|HTTP JSON<br/>+ JWT Bearer| B_ROUTES
+
+    classDef front  fill:#e0e7ff,stroke:#6366f1,color:#1e1b3a
+    classDef back   fill:#fce7f3,stroke:#ec4899,color:#1e1b3a
+    classDef db     fill:#cffafe,stroke:#0891b2,color:#0a3a4a
+    class F_PAGES,F_COMPONENTS,F_CONTEXT,F_API,F_HOOKS,F_UTILS front
+    class B_ROUTES,B_MIDDLEWARE,B_CONTROLLERS,B_VALIDATORS,B_MODELS,B_SERVICES,B_DB back
+    class DB db
