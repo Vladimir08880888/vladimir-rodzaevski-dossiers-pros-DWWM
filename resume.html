@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Crew — Résumé du projet</title>
+<style>
+  @page { margin: 1.4cm 1.6cm; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #2b2520;
+    font-size: 10.3pt;
+    line-height: 1.42;
+  }
+
+  .ribbon {
+    position: fixed; top: -12px; right: -26px;
+    width: 80px; height: 22px;
+    background: linear-gradient(135deg, #c3553a 0%, #8b2c14 100%);
+    transform: rotate(45deg);
+    z-index: -1;
+  }
+
+  header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    border-bottom: 3px solid #c3553a;
+    padding-bottom: 10px; margin-bottom: 14px;
+  }
+  .logo-mark { display:flex; flex-direction:column; gap:4px; margin-bottom: 6px; }
+  .logo-mark .bar { height: 7px; border-radius: 3px; background: #c3553a; }
+  .logo-mark .b1 { width: 34px; } .logo-mark .b2 { width: 58px; } .logo-mark .b3 { width: 44px; }
+  h1 { font-size: 27pt; font-weight: 800; color: #1a1612; margin: 0; }
+  .tagline { font-size: 12.5pt; font-weight: 700; color: #c3553a; margin: 2px 0 0; }
+  .meta { text-align: right; font-size: 8.8pt; color: #847261; line-height: 1.55; padding-right: 10px; }
+  .meta strong { color: #1a1612; }
+  .meta a { color: #8b2c14; text-decoration: none; }
+
+  h2 {
+    font-size: 11.5pt; font-weight: 800; color: #1a1612;
+    margin: 14px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #f3e6d6;
+  }
+  p { margin: 0 0 6px; }
+  ul { margin: 4px 0 6px; padding-left: 16px; }
+  li { margin: 2px 0; }
+  strong { color: #1a1612; }
+
+  .cols { display: flex; gap: 22px; }
+  .cols > div { flex: 1; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+    margin: 10px 0 4px;
+  }
+  .stat {
+    background: #f3e6d6; border-radius: 8px; padding: 8px 6px;
+    text-align: center;
+  }
+  .stat .n { font-size: 15pt; font-weight: 800; color: #c3553a; display:block; }
+  .stat .l { font-size: 7.6pt; color: #4a4034; display:block; margin-top: 2px; line-height: 1.2; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0; }
+  .tag {
+    font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 8pt; background: #f3e6d6; color: #8b2c14;
+    padding: 2px 7px; border-radius: 999px;
+  }
+
+  footer {
+    margin-top: 14px; padding-top: 8px; border-top: 1px solid #e4d9c8;
+    display: flex; justify-content: space-between; font-size: 8.6pt; color: #847261;
+  }
+  footer a { color: #8b2c14; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="ribbon"></div>
+
+<header>
+  <div>
+    <div class="logo-mark"><div class="bar b1"></div><div class="bar b2"></div><div class="bar b3"></div></div>
+    <h1>Crew</h1>
+    <p class="tagline">Planning d'équipe intelligent</p>
+  </div>
+  <div class="meta">
+    <strong>Vladimir Rodzaevskiy</strong><br>
+    Titre Professionnel Développeur Web et Web Mobile<br>
+    La Plateforme Formation — Marseille, 2026<br>
+    Démo : <a href="https://crew-planner-hazel.vercel.app">crew-planner-hazel.vercel.app</a><br>
+    Code : <a href="https://github.com/Vladimir08880888/crew">github.com/Vladimir08880888/crew</a>
+  </div>
+</header>
+
+<p>
+<strong>Crew</strong> est une application web de planification d'équipe destinée aux secteurs à rotation
+de shifts (restauration, hôtellerie, retail). Elle automatise la partie la plus fastidieuse du métier de
+manager — construire un planning hebdomadaire respectueux de la couverture de service et du droit du
+travail — grâce à un solver d'auto-planning qui propose une semaine complète en quelques secondes.
+Projet individuel, mené du cadrage au déploiement en production.
+</p>
+
+<div class="stats">
+  <div class="stat"><span class="n">1</span><span class="l">développeur<br>2 mois</span></div>
+  <div class="stat"><span class="n">4</span><span class="l">tables<br>12 migrations</span></div>
+  <div class="stat"><span class="n">30+</span><span class="l">endpoints<br>REST</span></div>
+  <div class="stat"><span class="n">13</span><span class="l">routes<br>front-end</span></div>
+  <div class="stat"><span class="n">100%</span><span class="l">couverture<br>sans violation HCR</span></div>
+  <div class="stat"><span class="n">&lt;1s</span><span class="l">génération<br>du planning</span></div>
+</div>
+
+<div class="cols">
+  <div>
+    <h2>Le problème → la solution</h2>
+    <p>
+    Le planning d'équipe se construit très souvent à la main (tableur, messages informels), sans garde-fou
+    sur la couverture ou le droit du travail. Crew automatise cette construction via un solver heuristique
+    multi-passes (couverture idéale → tolérance horaire → polyvalence → coût → équilibrage), tout en
+    garantissant par construction le respect de la Convention HCR (plafonds horaires, repos).
+    </p>
+
+    <h2>Fonctionnalités principales</h2>
+    <ul>
+      <li>Gestion d'équipe : création, code d'invitation, approbation des membres, rôles.</li>
+      <li>Planning hebdomadaire éditable (grille, clone/vidage de semaine).</li>
+      <li>Smart Planner : génération automatique avec aperçu avant validation.</li>
+      <li>Statistiques (couverture, heures par équipier) réservées aux managers.</li>
+      <li>Synchronisation calendrier native (iCal, QR code, sans app à installer).</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Architecture &amp; stack</h2>
+    <p>Front React 18 + React Router 6 + Vite, i18next (FR/EN). Back Node.js + Express, requêtes SQL
+    préparées via <span class="tag">mysql2</span> (pas d'ORM). MariaDB 10.11. Déployé sur Vercel (front)
+    et Fly.io (back + BDD).</p>
+    <div class="tags">
+      <span class="tag">React</span><span class="tag">Express</span><span class="tag">mysql2</span>
+      <span class="tag">JWT</span><span class="tag">bcrypt</span><span class="tag">ical-generator</span>
+      <span class="tag">Chart.js</span><span class="tag">i18next</span>
+    </div>
+
+    <h2>Sécurité</h2>
+    <ul>
+      <li>Requêtes SQL préparées — protection contre l'injection SQL.</li>
+      <li>Mots de passe hachés (bcrypt, cost 10), jamais stockés en clair.</li>
+      <li>Sessions JWT (HS256), middleware de rôle sur chaque route sensible.</li>
+      <li>Rate limiting sur les routes d'authentification.</li>
+    </ul>
+
+    <h2>Le choix technique clé</h2>
+    <p>
+    Heuristique multi-passes plutôt qu'un solveur MIP (programmation linéaire) : même logique
+    objectif/contrainte que la littérature académique du domaine (Bard et al. 2003), mais exécution
+    instantanée et comportement explicable — essentiel pour un usage interactif où le manager régénère
+    et ajuste plusieurs fois.
+    </p>
+  </div>
+</div>
+
+<footer>
+  <span>Dossier de projet complet (36 pages) : <a href="./dossier-projet/dossier-projet.pdf">dossier-projet.pdf</a></span>
+  <span>Comptes de démo : julien.patron@bistrot.fr / motdepasse123</span>
+</footer>
+
+</body>
+</html>
