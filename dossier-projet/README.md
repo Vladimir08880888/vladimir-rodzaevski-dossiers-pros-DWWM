@@ -12,7 +12,8 @@
 
 | Fichier                            | Contenu                                            |
 | ---------------------------------- | -------------------------------------------------- |
-| `cahier-des-charges.md`            | Cahier des charges (stack, métier, schéma, API, sécurité, déploiement, évolutions v2). |
+| `dossier-projet-complet.md` → `dossier-projet.pdf` | **Dossier de projet officiel** (36 pages) : introduction, compétences RNCP, résumé, cahier des charges complet (besoins, user stories, arborescence, MVP, wireframe, maquettes réelles), spécifications techniques (stack, MCD/MLD, dictionnaire des données, routes), exemple de raisonnement, conclusion. |
+| `cahier-des-charges.md`            | Cahier des charges technique détaillé (annexe : stack, schéma SQL, API, sécurité, déploiement, évolutions v2). |
 | `README-projet.md`                 | README du dépôt code (lien rapide).                |
 | `user-stories.md`                  | 18 user stories au format Connextra (auth, équipes, planning, iCal, stats, profil, i18n). |
 | `diagrammes/`                      | 8 diagrammes UML/Merise (Mermaid) : packages, cas d'utilisation, MCD, MLD, 2 séquences (Smart Planner, iCal), 2 activités (auth, approbation membre). |

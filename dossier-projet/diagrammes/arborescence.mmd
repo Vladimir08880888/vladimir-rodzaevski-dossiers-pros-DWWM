@@ -1,0 +1,56 @@
+%% Arborescence du site — Crew
+%% Code couleur : gris = accès libre, bleu = équipier, orange = manager,
+%% rouge = admin, vert = accès commun équipier/manager/admin
+
+flowchart TD
+    ACCUEIL[["/ Connexion ou redirection"]]
+    LOGIN["/login"]
+    REGISTER["/register"]
+    NOTFOUND["Page 404"]
+
+    ACCUEIL --> LOGIN
+    ACCUEIL --> REGISTER
+    ACCUEIL -.-> NOTFOUND
+
+    DASH_E["/dashboard — Équipier"]
+    DASH_M["/dashboard — Manager"]
+    LOGIN --> DASH_E
+    LOGIN --> DASH_M
+    REGISTER --> DASH_E
+    REGISTER --> DASH_M
+
+    TEAMS["/teams — Mes équipes"]
+    TEAMCREATE["/teams/create"]
+    TEAMJOIN["/teams/join"]
+    TEAMDETAIL["/teams/:id — Détail (manager)"]
+    TEAMSETTINGS["/teams/:id/settings"]
+
+    DASH_E --> TEAMS
+    DASH_M --> TEAMS
+    TEAMS --> TEAMCREATE
+    TEAMS --> TEAMJOIN
+    TEAMS --> TEAMDETAIL
+    TEAMDETAIL --> TEAMSETTINGS
+
+    PLANNING["/planning — Grille + Smart Planner"]
+    DASH_E --> PLANNING
+    DASH_M --> PLANNING
+
+    STATS["/stats — Réservé manager"]
+    DASH_M --> STATS
+
+    PROFILE["/profile — Infos + sync iCal"]
+    HELP["/help — Aide manager"]
+    DASH_E --> PROFILE
+    DASH_M --> PROFILE
+    DASH_M --> HELP
+
+    classDef public fill:#F3E9DD,stroke:#7C4D2E,color:#2b2520
+    classDef equipier fill:#DCE8E4,stroke:#2B6E63,color:#1a1612
+    classDef manager fill:#F3E6D6,stroke:#8A5A2B,color:#1a1612
+    classDef commun fill:#E7EEE4,stroke:#4a5c3f,color:#1a1612
+
+    class ACCUEIL,LOGIN,REGISTER,NOTFOUND public
+    class DASH_E,TEAMJOIN commun
+    class DASH_M,TEAMCREATE,TEAMDETAIL,TEAMSETTINGS,STATS,HELP manager
+    class TEAMS,PLANNING,PROFILE commun
